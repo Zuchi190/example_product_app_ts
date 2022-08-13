@@ -1,11 +1,33 @@
-import React, { useState } from "react";
+import React, { ChangeEventHandler, useState } from "react";
 import storage from "../firebase_storage"
 import { ref,uploadBytes, uploadBytesResumable } from "firebase/storage";
 import { setLogLevel } from "firebase/app";
+import { collection, addDoc } from "firebase/firestore";
+import db from "../firebase"
 
 export const New=(()=> {
   const [loading,setLoading]=useState(false);
   const [isUploaded,setUpLoaded]=useState(false);
+  const [name,setName]=useState("")
+  const [industry,setIndustry]=useState("")
+  const [material,setMaterial]=useState("")
+  const [thickness,setThickness]=useState("")
+
+  const onChangeName=(e: React.ChangeEvent<HTMLInputElement>)=>setName(e.target.value)
+  const onChangeIndustry=(e: React.ChangeEvent<HTMLInputElement>)=>setIndustry(e.target.value)
+  const onChangeMaterial=(e: React.ChangeEvent<HTMLInputElement>)=>setMaterial(e.target.value)
+  const onChangeThickness=(e: React.ChangeEvent<HTMLInputElement>)=>setThickness(e.target.value)
+
+  const saveFirebase=async ()=>{
+  // Add a new document with a generated id.
+    const docRef = await addDoc(collection(db, "products"), {
+      name:name,
+      material:material,
+      industry:industry,
+      thickness:thickness
+    });
+    console.log("Document written with ID: ", docRef.id);
+  }
 
   const OnFileUploadToFirebase=(e: any)=>{
     //console.log(e.target.files[0].name)
@@ -55,7 +77,7 @@ export const New=(()=> {
             </label>
           </div>
           <div className="md:w-2/3">
-            <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" value="製品名を入力してください" />
+            <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" value={name} onChange={onChangeName} />
           </div>
         </div>
         <div className="md:flex md:items-center mb-6">
@@ -65,7 +87,7 @@ export const New=(()=> {
             </label>
           </div>
           <div className="md:w-2/3">
-            <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-password" type="password" placeholder="特徴が入ります" />
+            <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-password" type="text" value={industry} onChange={onChangeIndustry}/>
           </div>
         </div>
         <div className="md:flex md:items-center mb-6">
@@ -75,7 +97,7 @@ export const New=(()=> {
             </label>
           </div>
           <div className="md:w-2/3">
-            <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-password" type="password" placeholder="特徴が入ります" />
+            <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-password" type="text" value={material} onChange={onChangeMaterial} />
           </div>
         </div>
         <div className="md:flex md:items-center mb-6">
@@ -85,7 +107,7 @@ export const New=(()=> {
             </label>
           </div>
           <div className="md:w-2/3">
-            <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-password" type="password" placeholder="特徴が入ります" />
+            <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-password" type="text" value={thickness} onChange={onChangeThickness} />
           </div>
         </div>
     
@@ -114,7 +136,7 @@ export const New=(()=> {
         <div className="md:flex md:items-center">
           <div className="md:w-1/3"></div>
           <div className="md:w-2/3">
-            <button className="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button">
+            <button className="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button" onClick={saveFirebase}>
             データ登録
             </button>
           </div>
