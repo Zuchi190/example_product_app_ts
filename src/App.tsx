@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {Header} from "./components/Header"
 import {BaseRouter} from "./router/BaseRouter"
 
 
+
+
 function App() {
+
   return (
     <div className="App">
       <Header />
       <BaseRouter/>
-      
   </div>
   );
 }

@@ -1,6 +1,8 @@
 import React from "react";
 import {memo} from "react"
 
+
+
 export const Product:React.FC =memo(()=>{
     return(
       <div className="snap-x flex snap-mandatory h-screen w-96 mx-auto overflow-scroll">
